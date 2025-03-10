@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+ReboardMapper.java(인터페이스파일과), ReboardMapper.xml연결  
+xml파일자체가 객체(클래스명변환ReboardMapper.java 
+변수명 reboardMapper(인스턴스)
+-->
+<mapper namespace="reboard.respository.ReboardMapper">
+<!-- sql마지막에 ;을 사용해서는 안된다. -->
+<insert id="insert">
+insert into board(id,title,content,attachment,author,createdat,type) 
+values(board_id_seq.nextval,
+#{board.title},#{board.content},#{board.attachment}
+,'admin',sysdate,'공지사항')
+</insert>
+
+<select id="findById" resultType="reboard.model.Board">
+select * from board where id=#{id}
+</select>
+
+<select id="findAll" resultType="reboard.model.Board">
+select * from board order by id desc
+</select>
+
+<update id="update" parameterType="reboard.model.Board">
+update board set title=#{title},author=#{author},
+createdat=#{createdat},content=#{content},
+attachment=#{attachment},viewcnt=#{viewcnt},
+type=#{type} where id=#{id}
+</update>
+<!-- 
+parameterType이 있을 경우 위와 같이 변수만 적용가능하고
+없을 경우 아래와 같이 모두 작성해야함.
+update board set title=#{board.title},author=#{board.author},
+createdat=#{board.createdat},content=#{board.content},
+attachment=#{board.attachment},viewcnt=#{board.viewcnt},
+type=#{board.type} where id=#{board.id}
+ -->
+ <delete id="delete">
+ delete from board where id=#{id}
+ </delete>
+ 
+ <!-- 리턴타입이 반드시 존재 java.lang.Integer or int-->
+ <select id="count" resultType="int">
+ select count(*) cnt from board where isdel=0
+ </select>
+ 
+ <!-- 단독으로 사용되는 전달변수는 @Param("startnum") 설정 -->
+ <select id="pageList" resultType="reboard.model.Board">
+ select * from (
+select rownum num,id,title,author,createdat,content,
+attachment,viewcnt,type,isdel,updatedat,parentid,tab
+ from board  where isdel=0
+ start with parentid=0
+ connect by prior id=parentid
+ order siblings by id desc) t 
+ where t.num between #{startnum} and #{endnum}
+ </select>
+ 
+ <update id="viewCountPlus">
+ update board set viewcnt=viewcnt+1 where id=#{id}
+ </update>
+ 
+ <insert id="replyInsert">
+ insert into board(id,title,author,createdat,
+content,type,parentid,tab) 
+values(board_id_seq.nextval,#{board.title},#{board.author},sysdate,
+#{board.content},#{board.type},#{board.parentid},#{board.tab})
+</insert>
+
+<!-- 
+입력필드명 : String searchField,String searchQuery
+리턴타입이 반드시 존재 java.lang.Integer or int
+-->
+ <select id="searchCount" resultType="int">
+ select count(*) cnt from board where isdel=0
+  and ${searchField} like '%${searchQuery}%'
+ </select>
+
+ <select id="searchPageList" resultType="reboard.model.Board">
+ select * from (
+select rownum num,id,title,author,createdat,content,
+attachment,viewcnt,type,isdel,updatedat,parentid,tab
+ from board  where isdel=0 and ${searchField} like '%${searchQuery}%'
+ start with parentid=0
+ connect by prior id=parentid
+ order siblings by id desc) t 
+ where t.num between #{startnum} and #{endnum}
+ </select>
+ 
+ <select id="dateSearchCount" resultType="int">
+ select count(*) cnt from board where isdel=0
+  and createdat between #{startDate} and #{endDate}
+ </select>
+ 
+ <!--
+ title='test' -> 값의 입력이므로 @Param("title") 필요없음
+ values('test') ->@Param("title") 필요
+ 결론 : #을 사용하면 ' '로 붙는다. $는 순수 텍스트 
+ # 값의 바인딩, $값 ' '가 붙지 않는 값자체
+ -->
+ 
+  <select id="dateSearchPageList" resultType="reboard.model.Board">
+ select * from (
+select rownum num,id,title,author,createdat,content,
+attachment,viewcnt,type,isdel,updatedat,parentid,tab
+ from board  where isdel=0 
+  and createdat between #{startDate} and #{endDate}
+ start with parentid=0
+ connect by prior id=parentid
+ order siblings by id desc) t 
+ where t.num between #{startnum} and #{endnum}
+ </select>
+</mapper>
+
+
+
+

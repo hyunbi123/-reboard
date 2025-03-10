@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:mybatis-spring="http://mybatis.org/schema/mybatis-spring"
+	xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.3.xsd
+		http://mybatis.org/schema/mybatis-spring http://mybatis.org/schema/mybatis-spring-1.2.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd">
+<!-- @Controller를 인식하기 위한 기본사항 -->
+<context:component-scan base-package="reboard"/>
+
+<!-- 페이지처리시 앞과 뒤에 있는 문자열 제거 -->
+<bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+<property name="prefix" value="/WEB-INF/views/"></property>
+<property name="suffix" value=".jsp"></property>
+</bean>
+
+<!-- 파일업로드 설정  -->
+<bean id="multipartResolver" 
+class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+<property name="maxUploadSize" value="10485760"></property>
+<property name="maxInMemorySize" value="4096"></property>
+</bean>
+
+<!--mybatis처리 사항 (
+1)db접속에 필요한 설정입력(config파일), 
+2)datasource, 
+3)sqlSessionFactory)
+추가사항)mybatis사용하기위해서 인터페이스, sql문이 있는 xml 파일작성(이름동일)-->
+<mybatis-spring:scan base-package="reboard"/>
+<!-- db접속관련 정보만을  hikariConfig객체 생성 -->
+<bean id="hikariConfig" class="com.zaxxer.hikari.HikariConfig">
+<property name="driverClassName" value="oracle.jdbc.driver.OracleDriver"/>
+<property name="jdbcUrl" value="jdbc:oracle:thin:@localhost:1521:xe"/>
+<property name="username" value="system"/>
+<property name="password" value="1234"/>
+</bean>
+
+<bean id="dataSource" class="com.zaxxer.hikari.HikariDataSource" destroy-method="close">
+<constructor-arg ref="hikariConfig"/>
+</bean>
+
+<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+<property name="dataSource" ref="dataSource"/>
+</bean>
+
+<!-- 이미지, 자바스크립트, css파일 접근방법 -->
+<mvc:resources mapping="/**" location="/" />
+<mvc:annotation-driven></mvc:annotation-driven>
+
+</beans>
+
+
+
+
+
+
+
