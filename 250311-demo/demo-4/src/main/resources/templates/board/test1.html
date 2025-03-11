@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<div th:text="${data}">model에 저장된 객체를 타임리프에서 확인방법</div>
+
+<script th:inline="javascript">
+let message = /*[[${data}]]*/ "기본값"; //{},[],""
+console.log(message);
+</script>
+
+<script th:inline="javascript">
+    let jsonData = /*[[${data}]]*/ {};
+    console.log(jsonData);
+</script>
+
+<div id="info" th:data-name="kim" th:data-age="23"></div>
+
+<script>
+    let info = document.getElementById("info");
+    let userName = info.getAttribute("data-name");
+    let userAge = info.getAttribute("data-age");
+    console.log(userName, userAge);
+</script>
+
+<script th:inline="javascript">
+    let user = /*[[${user}]]*/ {};
+    console.log(user);
+</script>
+
+</body>
+</html>

@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html xmlns:th="http//www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<h1>로그인실패</h1>
+<div th:if="${param.error}">
+<p class="error-message">로그인 실패. 아이디 또는 비밀번호를 확인하세요.</p>
+</div>
+</body>
+</html>

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<link rel="stylesheet" th:href="@{/webjars/bootstrap/5.3.3/css/bootstrap.min.css}">
+<script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+<title>폼 예제</title>
+</head> 
+<body>
+    <div class="container mt-5">
+        <h2>질문입력</h2>
+        
+        <form th:action="@{/board/question/insert}"
+     method="post" th:object="${questionForm}">
+      <div th:if="${#fields.hasAnyErrors()}">
+      <div th:each="err:${#fields.allErrors()}" th:text="${err}"></div>
+      </div>
+      <!-- Subject 입력 필드 -->
+      <div class="mb-3">
+        <label for="subject" class="form-label">질문제목</label>
+        <input type="text" class="form-control" id="subject" placeholder="insert" name="subject">
+      </div>
+
+      <!-- Content 입력 필드 -->
+      <div class="mb-3">
+        <label for="content" class="form-label">질문내용</label>
+        <textarea class="form-control" id="content" name="content" placeholder="insert" rows="4"></textarea>
+      </div>
+
+      <!-- 제출 버튼 -->
+      <button type="submit" class="btn btn-primary">질문입력</button>
+    </form>
+    
+    </div>
+    
+</body>
+</html>

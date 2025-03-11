@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<link rel="stylesheet" th:href="@{/webjars/bootstrap/5.3.3/css/bootstrap.min.css}">
+<script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+</head>
+<body>
+<div class="container mt-3">
+  <h2>질문리스트</h2>
+  <p>질문에 대한 답글리스트 입니다.</p>
+  <table class="table">
+    <thead class="table-dark">
+      <tr>
+        <th>아이디</th>
+        <th>질문제목</th>
+        <th>질문내용[답변내용]</th>
+        <th>작성일</th>
+      </tr>
+    </thead>
+    <tbody >
+      <tr th:each="question : ${qlist}">
+        <td th:text="${question.id}">아이디출력-id</td>
+        <td th:text="${question.subject}">질문제목출력-subject</td>
+        <td th:text="${question.content}">질문내용출력 또는 답변내용출력-content</td>
+        <!-- <td th:text="${question.createDate}">작성일-createDate</td> -->
+        <td th:text="${#temporals.format(question.createDate, 'yyyy-MM-dd')}">작성일-createDate</td>
+      </tr>
+     </tbody>
+  </table>
+  
+  <h5>단일값에 대한 반복은 쉽게 표현가능</h5>
+  <ul th:each="question : ${qlist}">
+  	<li th:text="${question.content}"></li>
+  	<ul th:each="answer : ${question.answerList}">
+  		<li th:text="${answer.content}"></li>
+  	</ul>
+  </ul>
+  
+  <!-- <h2>질문리스트</h2>
+  <p>질문에 대한 답글리스트 입니다.</p>
+  <table class="table">
+    <thead class="table-dark">
+      <tr>
+        <th>아이디</th>
+        <th>질문제목</th>
+        <th>질문내용[답변내용]</th>
+        <th>작성일</th>
+      </tr>
+    </thead>
+    <tbody id="tbody">
+      <tr th:each="question : ${qlist}">
+        <td th:text="${question.id}">아이디출력-id</td>
+        <td th:text="${question.subject}">질문제목출력-subject</td>
+        <td th:text="${question.content}">질문내용출력 또는 답변내용출력-content</td>
+        <td th:text="${#temporals.format(question.createDate, 'yyyy-MM-dd')}">작성일-createDate</td>
+      </tr>
+    
+     </tbody>
+  </table> -->
+
+<button>insert</button>
+
+<script>
+//var qlist = /*[[${qlist}]]*/ [];
+//console.log(qlist);
+/*
+$(document).ready(function() {
+
+	$("button").click(function(){
+		 		 
+		var answerList = selectedQuestion.answerList;
+		 const newRow = $('<tr>');
+	     newRow.append('<td>1</td>');
+	     newRow.append('<td>2</td>');
+	     newRow.append('<td>3</td>');
+	     newRow.append('<td>4</td>');
+	     $("#tbody").append(newRow);
+	     
+	     // 추가된 데이터를 자바스크립트 배열에 추가
+         answerList.push({
+             id: '새 아이디',
+             subject: '새 질문 제목',
+             content: '새 질문 내용',
+             createDate: '2025-03-10'
+         });
+
+	});
+});
+*/
+</script>  
+</div>
+</body>
+</html>

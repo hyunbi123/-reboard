@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Auto Create Div</title>
+    <style>
+        body {
+            height: 200vh;
+        }
+        .generated-div {
+            width: 200px;
+            height: 100px;
+            background-color: lightblue;
+            margin: 10px 0;
+            padding: 10px;
+            border: 1px solid blue;
+        }
+    </style>
+</head>
+<body>
+    <a href="#">링크 태그</a>
+    <script>
+    
+        document.addEventListener("DOMContentLoaded", function () {
+            const target = document.querySelector("a");
+            if (target) {
+                const observer = new IntersectionObserver((entries, observer) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                        	for(i=0;i<5;i++){
+                            createDiv(i+1);
+                        	}
+                            observer.disconnect();
+                        }
+                    });
+                }, { threshold: 1.0 });
+                
+                observer.observe(target);
+            }
+        });
+
+        function createDiv(i) {
+            const div = document.createElement("div");
+            div.classList.add("generated-div");
+            //div.textContent = "자동 생성된 div";
+            div.textContent =i
+            document.body.appendChild(div);
+        }
+
+    </script>
+
+</body>
+
+</html>

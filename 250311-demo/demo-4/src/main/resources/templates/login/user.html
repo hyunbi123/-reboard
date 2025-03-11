@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Insert title here</title>
+</head>
+<body>
+<h1>user page</h1>
+<!-- Use POST method for logout -->
+<form action="#" th:action="@{/logout}" method="post">
+    <input type="submit" value="[로그아웃]">
+    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+</form>
+
+<p>
+    <!-- Accessing the username from the authentication -->
+    <span th:text="${#authentication.principal.username}"></span>
+    <span th:with="user=${#authentication.principal}">
+        <p>로그인 사용자 정보: <span th:text="${user}"></span></p>
+        <p>사용자 이름: <span th:text="${user.username}"></span></p>
+    </span>
+    
+    <!-- Authorization logic -->
+    <div th:if="${#authentication.principal != null}">
+        <p>인증된 사용자!</p>
+    </div>
+    
+    <div th:if="${#authentication.principal == null}">
+        <p>인증되지 않은 사용자</p>
+    </div>
+
+    <div th:if="${#authorization.hasRole('ROLE_USER')}">
+        <p>권한은 USER!</p>
+    </div>
+</p>
+
+</body>
+</html>

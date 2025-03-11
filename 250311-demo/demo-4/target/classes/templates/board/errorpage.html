@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<h1>에러처리</h1>
+<div th:each="err : ${#fields.allErrors()}" th:text="${err}">
+에러메시지창</div>
+</body>
+</html>

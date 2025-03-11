@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<link rel="stylesheet" th:href="@{/webjars/bootstrap/5.3.3/css/bootstrap.min.css}">
+<script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+<title>폼 예제</title>
+</head> 
+<body>
+    <div class="container mt-5">
+    
+    <a href="/board/question/insert">질문입력하기</a>
+
+  <h2>질문리스트</h2>
+  <p>질문에 대한 답글리스트 입니다.</p>
+  <table class="table">
+    <thead class="table-dark">
+      <tr>
+        <th>아이디</th>
+        <th>질문제목</th>
+        <th>질문내용[답변내용]</th>
+        <th>작성일</th>
+      </tr>
+    </thead>
+    <tbody >
+      <tr th:each="question : ${paging.content}">
+        <td th:text="${question.id}">아이디출력-id</td>
+        <td th:text="${question.subject}">질문제목출력-subject</td>
+        <td th:text="${question.content}">질문내용출력 또는 답변내용출력-content</td>
+        <td th:text="${#temporals.format(question.createDate, 'yyyy-MM-dd')}">작성일-createDate</td>
+      </tr>
+      <tr>
+      	<td colspan="4">
+       <ul class="pagination">
+			 <!-- 이전 페이지 링크 -->
+			 <li class="page-item" th:if="${paging.hasPrevious}">
+			     <a class="page-link" th:href="@{/board/pagelist(page=${paging.number - 1})}">이전페이지</a>
+			 </li>
+			
+			 <!-- 페이지 번호 리스트 -->
+			 <li class="page-item" th:each="page : ${#numbers.sequence(0, paging.totalPages - 1)}">
+			     <a class="page-link" th:href="@{/board/pagelist(page=${page})}" th:text="${page + 1}"></a>
+			 </li>
+			
+			 <!-- 다음 페이지 링크 -->
+			    <li class="page-item" th:if="${paging.hasNext}">
+			        <a class="page-link" th:href="@{/board/pagelist(page=${paging.number + 1})}">다음페이지</a>
+			    </li>
+			</ul>
+  		</td>
+      </tr>
+     </tbody>
+  </table>
+  </div>
+</body>
+</html>
